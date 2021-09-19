@@ -30,4 +30,4 @@ jobs:
         with:
           context: tanzu-platform
           push: true
-          tags: ryansmith4124/tqanzu-platform:latest
+          tags: ryansmith4124/tanzu-platform:latest
