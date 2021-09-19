@@ -19,7 +19,7 @@ RUN latest_tag=$(curl -s https://api.github.com/repos/concourse/concourse/releas
 RUN current_terraform=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')/terraform_$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version') && \
     curl -Lf https://releases.hashicorp.com/terraform/${current_terraform}_linux_amd64.zip -o /tmp/terraform.zip && unzip -o /tmp/terraform.zip -d /usr/local/bin
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip && \
-    unzip -o /tmp/awscliv2.zip -d /tmp && /tmp/aws/install
+    unzip -q -o /tmp/awscliv2.zip -d /tmp && /tmp/aws/install > /dev/null
 
 USER vscode
 WORKDIR /home/vscode
