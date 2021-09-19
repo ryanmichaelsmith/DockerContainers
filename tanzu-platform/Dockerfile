@@ -1,6 +1,6 @@
 FROM python:3-bullseye
 
-RUN apt-get update && apt-get install -y git curl unzip jq sudo man less dnsutils
+RUN apt-get update && apt-get install -y git curl unzip jq sudo man less dnsutils lsb-release
 RUN useradd -m -s /bin/bash vscode && echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vscode
 RUN curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx -C /usr/local/bin
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
