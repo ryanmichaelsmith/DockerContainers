@@ -25,4 +25,5 @@ RUN curl -L "http://controlplane.amica.com/api/v1/cli?arch=amd64&platform=linux"
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest| sed -Ene '/^\s*"tag_name": \s*"v(.+)",$/s//\1/p') && \
     curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar -zx --transform='s|cf8|cf|' -C /usr/local/bin cf8
 
+
 ENTRYPOINT sudo chown -R vscode.vscode /workspace && /bin/bash
