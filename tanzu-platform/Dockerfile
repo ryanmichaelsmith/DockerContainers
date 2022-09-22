@@ -21,6 +21,6 @@ RUN current_terraform=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/te
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip && \
     unzip -o /tmp/awscliv2.zip -d /tmp && /tmp/aws/install
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest| sed -Ene '/^\s*"tag_name": \s*"v(.+)",$/s//\1/p') && \
-    curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar -zx --transform='s|cf8|cf|' -C /usr/local/bin cf8
+    curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar x -z -O cf8 > /usr/local/bin/cf
 
 ENTRYPOINT /bin/sh
