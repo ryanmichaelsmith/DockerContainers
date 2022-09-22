@@ -1,6 +1,6 @@
 FROM python:3-alpine
 
-RUN apk add git curl jq doas bind-tools
+RUN apk add git curl jq yq doas bind-tools vim
 RUN adduser -D vscode && echo "permit nopass vscode" >> /etc/doas.d/doas.conf
 RUN curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx -C /usr/local/bin
 RUN latest_tag=$(curl -s https://api.github.com/repositories/57993310/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
