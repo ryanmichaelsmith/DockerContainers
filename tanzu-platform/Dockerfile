@@ -1,7 +1,7 @@
-FROM python:3-bullseye
+FROM python:3-alpine
 
-RUN apt-get update && apt-get install -y git curl unzip jq sudo man less dnsutils iputils-ping vim
-RUN useradd -m -s /bin/bash vscode && echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vscode
+RUN apk add git curl jq doas bind-tools
+RUN adduser -D vscode && echo "permit nopass vscode" >> /etc/doas.d/doas.conf
 RUN curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx -C /usr/local/bin
 RUN latest_tag=$(curl -s https://api.github.com/repositories/57993310/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
     curl -Lf https://github.com/cloudfoundry-incubator/credhub-cli/releases/latest/download/credhub-linux-${latest_tag}.tgz | tar -zx -C /usr/local/bin
@@ -20,10 +20,7 @@ RUN current_terraform=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/te
     curl -Lf https://releases.hashicorp.com/terraform/${current_terraform}_linux_amd64.zip -o /tmp/terraform.zip && unzip -o /tmp/terraform.zip -d /usr/local/bin
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip && \
     unzip -o /tmp/awscliv2.zip -d /tmp && /tmp/aws/install
-RUN curl -L "http://controlplane.amica.com/api/v1/cli?arch=amd64&platform=linux" -o /usr/local/bin/fly && \
-    chmod +x /usr/local/bin/fly;true
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest| sed -Ene '/^\s*"tag_name": \s*"v(.+)",$/s//\1/p') && \
     curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar -zx --transform='s|cf8|cf|' -C /usr/local/bin cf8
 
-
-ENTRYPOINT sudo chown -R vscode.vscode /workspace && /bin/bash
+ENTRYPOINT /bin/sh
