@@ -14,6 +14,6 @@ RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/rele
     curl -Lf https://github.com/cloudfoundry/bosh-cli/releases/latest/download/bosh-cli-${latest_tag}-linux-amd64 -o /usr/local/bin/bosh && \
     chmod +x /usr/local/bin/bosh
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest| sed -Ene '/^\s*"tag_name": \s*"v(.+)",$/s//\1/p') && \
-    curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar x -z -O cf8 > /usr/local/bin/cf
+    curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar xz -C /usr/local/bin
 
 ENTRYPOINT /bin/sh
