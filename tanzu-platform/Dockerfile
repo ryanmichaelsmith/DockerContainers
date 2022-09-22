@@ -1,7 +1,7 @@
 FROM python:3-alpine
 
 RUN apk add git curl jq yq doas bind-tools vim aws-cli terraform
-RUN apk --no-cache add go && export GOBIN="/usr/local/bin" && go install code.cloudfoundry.org/uaa-cli@latest && apk del go && rm -rf /root/go
+RUN apk --no-cache add go && go install code.cloudfoundry.org/uaa-cli@latest && mv /root/go/bin/uaa-cli /usr/local/bin/uaa && apk del go && rm -rf /root/go
 RUN adduser -D vscode && echo "permit nopass vscode" >> /etc/doas.d/doas.conf
 RUN latest_tag=$(curl -s https://api.github.com/repositories/57993310/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
     curl -Lf https://github.com/cloudfoundry-incubator/credhub-cli/releases/latest/download/credhub-linux-${latest_tag}.tgz | tar -zx -C /usr/local/bin
