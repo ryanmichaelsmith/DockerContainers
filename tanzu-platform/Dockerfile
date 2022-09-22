@@ -1,8 +1,7 @@
 FROM python:3-alpine
 
-RUN apk add git curl jq yq doas bind-tools vim
+RUN apk add git curl jq yq doas bind-tools vim aws-cli terraform
 RUN adduser -D vscode && echo "permit nopass vscode" >> /etc/doas.d/doas.conf
-RUN curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx -C /usr/local/bin
 RUN latest_tag=$(curl -s https://api.github.com/repositories/57993310/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
     curl -Lf https://github.com/cloudfoundry-incubator/credhub-cli/releases/latest/download/credhub-linux-${latest_tag}.tgz | tar -zx -C /usr/local/bin
 RUN latest_tag=$(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
@@ -16,10 +15,6 @@ RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/rele
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/uaa-cli/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
     curl -Lf https://github.com/cloudfoundry/uaa-cli/releases/latest/download/uaa-linux-amd64-${latest_tag} -o /usr/local/bin/uaa && \
     chmod +x /usr/local/bin/uaa
-RUN current_terraform=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')/terraform_$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version') && \
-    curl -Lf https://releases.hashicorp.com/terraform/${current_terraform}_linux_amd64.zip -o /tmp/terraform.zip && unzip -o /tmp/terraform.zip -d /usr/local/bin
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip && \
-    unzip -o /tmp/awscliv2.zip -d /tmp && /tmp/aws/install
 RUN latest_tag=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest| sed -Ene '/^\s*"tag_name": \s*"v(.+)",$/s//\1/p') && \
     curl -Lf "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$latest_tag&source=github-rel" | tar x -z -O cf8 > /usr/local/bin/cf
 
