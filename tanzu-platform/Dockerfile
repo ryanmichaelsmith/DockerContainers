@@ -6,7 +6,7 @@ RUN adduser -D vscode && echo "permit nopass vscode" >> /etc/doas.d/doas.conf
 RUN latest_tag=$(curl -s https://api.github.com/repositories/57993310/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
     curl -Lf https://github.com/cloudfoundry-incubator/credhub-cli/releases/latest/download/credhub-linux-${latest_tag}.tgz | tar -zx -C /usr/local/bin
 RUN latest_tag=$(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | sed -Ene '/^\s*"tag_name": \s*"(.+)",$/s//\1/p') && \
-    curl -Lf https://github.com/pivotal-cf/om/releases/latest/download/om-linux-${latest_tag}.tar.gz | tar -zx -C /usr/local/bin om
+    curl -Lf https://github.com/pivotal-cf/om/releases/latest/download/${latest_tag}/om-linux-${latest_tag}.tar.gz | tar -zx -C /usr/local/bin om
 RUN latest_tag=$(curl -s https://api.github.com/repos/pivotal-cf/pivnet-cli/releases/latest | sed -Ene '/^\s*"tag_name": \s*"v(.+)",$/s//\1/p') && \
     curl -Lf https://github.com/pivotal-cf/pivnet-cli/releases/latest/download/pivnet-linux-amd64-${latest_tag} -o /usr/local/bin/pivnet && \
     chmod +x /usr/local/bin/pivnet
